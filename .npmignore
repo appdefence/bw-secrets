@@ -1,0 +1,11 @@
+.git
+.gitignore
+.env
+.env.*
+node_modules
+coverage
+tests
+*.test.js
+*.spec.js
+.vscode
+.idea
