@@ -1,37 +1,36 @@
 # @appdefence/bw-secrets
 
-Simple Bitwarden secrets manager wrapper
+Simple Bitwarden secrets manager wrapper.
 
 ## Installation
 
 ```bash
 npm install @appdefence/bw-secrets
+# The package uses @bitwarden/sdk-napi under the hood; ensure it is available in your environment.
 ```
 
-## Usage
+## Exports
+
+This package exports two helpers:
+
+- `createClient(config)` — low-level helper to create and initialize a Bitwarden client using an access token.
+- `getAllSecrets(config)` — convenience helper that returns an array of secrets as `{ key, value }`.
+
+## Programmatic usage
 
 ```javascript
-const { getAllSecrets } = require('@appdefence/bw-secrets');
+const { getAllSecrets, createClient } = require('@appdefence/bw-secrets');
 // Or using ES modules:
-// import { getAllSecrets } from '@appdefence/bw-secrets';
+// import { getAllSecrets, createClient } from '@appdefence/bw-secrets';
 
 const config = {
-    apiUrl: 'YOUR_API_URL',
-    identityUrl: 'YOUR_IDENTITY_URL',
-    accessToken: 'YOUR_ACCESS_TOKEN',
-    organizationId: 'YOUR_ORG_ID'
+  apiUrl: 'https://api.bitwarden.com',
+  identityUrl: 'https://identity.bitwarden.com',
+  accessToken: 'YOUR_ACCESS_TOKEN',    // required
+  organizationId: 'YOUR_ORG_ID'
 };
 
-// Fetch all secrets
-const secrets = await getAllSecrets(config);
-secrets.forEach(({ key, value }) => console.log(`${key}: ${value}`));
-```
-
-## Configuration
-
-Required environment variables or config options:
-
-- `apiUrl`: Bitwarden API URL
-- `identityUrl`: Bitwarden Identity URL
-- `accessToken`: Access token for authentication
-- `organizationId`: Organization ID
+(async () => {
+  const secrets = await getAllSecrets(config);
+  secrets.forEach(({ key, value }) => console.log(`${key}: ${value}`));
+})();

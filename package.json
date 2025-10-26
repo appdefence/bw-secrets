@@ -1,6 +1,6 @@
 {
   "name": "@appdefence/bw-secrets",
-  "version": "1.0.2",
+  "version": "0.0.1",
   "description": "Simple Bitwarden secrets manager",
   "main": "lib/bitwarden.js",
   "types": "lib/bitwarden.d.ts",
@@ -15,7 +15,8 @@
   "author": "appdefence",
   "license": "MIT",
   "dependencies": {
-    "@bitwarden/sdk-napi": "^0.3.0"
+    "@bitwarden/sdk-napi": "^0.3.0",
+    "dotenv": "^17.2.3"
   },
   "publishConfig": {
     "access": "public"
@@ -27,7 +28,6 @@
   "directories": {
     "lib": "lib"
   },
-  "devDependencies": {},
   "bugs": {
     "url": "https://github.com/appdefence/bw-secrets/issues"
   },
