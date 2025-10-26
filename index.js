@@ -1,37 +1,25 @@
 'use strict';
 
 const dotenv = require('dotenv');
-const { BitwardenClient, DeviceType } = require('@bitwarden/sdk-napi');
+const { getAllSecrets } = require('./lib/bitwarden');
 
-// Initialize environment variables before usage
+// Initialize environment variables
 dotenv.config();
 
 /**
- * Bitwarden SDK configuration
- */
-const config = {
-    apiUrl: process.env.BW_API_URL,
-    identityUrl: process.env.BW_IDENTITY_URL,
-    userAgent: 'Bitwarden SDK',
-    deviceType: DeviceType.SDK,
-};
-
-/**
- * Lists all secrets from Bitwarden
- * @throws {Error} If authentication or API calls fail
+ * Main application entry point
  */
 async function main() {
     try {
-        const client = new BitwardenClient(config);
-        await client.auth().loginAccessToken(process.env.BW_ACCESS_TOKEN);
+        const config = {
+            apiUrl: process.env.BW_API_URL,
+            identityUrl: process.env.BW_IDENTITY_URL,
+            accessToken: process.env.BW_ACCESS_TOKEN,
+            organizationId: process.env.BW_ORGANIZATION_ID,
+        };
 
-        const secretsClient = client.secrets();
-        const { data: secrets } = await secretsClient.list(process.env.BW_ORGANIZATION_ID);
-
-        for (const sec of secrets) {
-            const secret = await secretsClient.get(sec.id);
-            console.log(`${secret.key} | ${secret.value}`);
-        }
+        const secrets = await getAllSecrets(config);
+        secrets.forEach(({ key, value }) => console.log(`${key} | ${value}`));
     } catch (error) {
         console.error('Error:', error.message);
         process.exit(1);
